@@ -15,11 +15,26 @@ public class ListDeduplicatorTest {
     @Test
     public void deduplicate() {
         ListDeduplicator deduplicator = new ListDeduplicator();
-        List<Integer> distinct = deduplicator.deduplicate(helperList());
+        GenericListSorter listSorter = new ListSorter();
+        List<Integer> distinct = deduplicator.deduplicate(helperList(), listSorter);
         // List<Integer> distinct = deduplicator.deduplicate(list);
 
         Assertions.assertEquals(helperExpected(), distinct);
         // Assertions.assertEquals(expected, distinct);
+    }
+
+    @Test
+    public void deduplicate_bug_8726() {
+        class StubListSorter implements GenericListSorter {
+            @Override
+            public List<Integer> sort(List<Integer> list) {
+                return Arrays.asList(1, 2, 2, 4);
+            }
+        }
+        ListDeduplicator listDeduplicator = new ListDeduplicator();
+        GenericListSorter stubSorter = new StubListSorter();
+        List<Integer> result = listDeduplicator.deduplicate(helperBug8726(), stubSorter);
+        Assertions.assertEquals(result, Arrays.asList(1, 2, 4));
     }
 
     public List<Integer> helperList() {
@@ -29,6 +44,8 @@ public class ListDeduplicatorTest {
     public List<Integer> helperExpected() {
         return Arrays.asList(1, 2, 4, 5);
     }
+
+    public List<Integer> helperBug8726() { return Arrays.asList(1, 2, 4, 2); }
     /*
     @BeforeEach
     public void arrangementHelper() {

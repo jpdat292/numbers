@@ -59,7 +59,7 @@ public class ListAggregatorTest {
     public void distinct_bug_8726() {
         class StubListDeduplicator implements GenericListDeduplicator {
             @Override
-            public List<Integer> deduplicate(List<Integer> list) {
+            public List<Integer> deduplicate(List<Integer> list, GenericListSorter genericListSorter) {
                 return Arrays.asList(1, 2, 4);
             }
         }

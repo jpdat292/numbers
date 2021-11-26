@@ -53,7 +53,8 @@ public class ListAggregator {
      * @return The number of distinct numbers.
      */
     public int distinct(List<Integer> list, GenericListDeduplicator deduplicator) {
-        List<Integer> distinct = deduplicator.deduplicate(list);
+        ListSorter listSorter = new ListSorter();
+        List<Integer> distinct = deduplicator.deduplicate(list, listSorter);
 
         return distinct.size();
     }
